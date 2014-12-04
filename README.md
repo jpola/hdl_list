@@ -1,4 +1,4 @@
 hdl_list
 ========
 
-hashed double linked list implementation
+Hashed double linked list implementation in C.
