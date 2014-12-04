@@ -191,7 +191,7 @@ const void* hdl_get_value_by_hash(const hdl_list *list,
  * @param list Pointer to hdl_list
  * @param e Pointer to hdl_element which needs to be erased
  */
-void hdl_delete_element (hdl_list *list, hdl_element* e);
+void hdl_delete_element (hdl_list *list, hdl_element **e);
 
 /**
  * @brief hdl_delete_element_by_hash Delete e from the list by its hash code

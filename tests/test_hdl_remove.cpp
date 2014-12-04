@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(hdl_list_remove_by_key)
     BOOST_CHECK (strcmp((char*)e->value, source2) == 0);
 
     free(e);
-    BOOST_CHECK(e == NULL);
+    e = NULL; //remember to set it to null! avoids problems
 
     hdl_destroy(&L);
     BOOST_CHECK (L == NULL);
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(hdl_list_remove_by_hash)
     BOOST_CHECK (strcmp((char*)e->value, source2) == 0);
 
     free(e);
-    BOOST_CHECK(e == NULL);
+    e = NULL;
 
     hdl_destroy(&L);
     BOOST_CHECK (L == NULL);

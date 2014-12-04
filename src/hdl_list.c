@@ -162,7 +162,7 @@ static void __hdl_remove_element(hdl_list *list, hdl_element* e)
 }
 
 // helper function used to properly free allocated resources
-static void __hdl_free_element(hdl_list *list , hdl_element* e)
+static void __hdl_free_element(hdl_list *list , hdl_element** e)
 {
     if(list->cl_type)
     {
@@ -176,21 +176,26 @@ static void __hdl_free_element(hdl_list *list , hdl_element* e)
         printf ("hdl_free_element: removing element by C free() function\n");
 #endif
         //if(e->value) free(e->value);
-        if(e) free(e);
+        if(*e)
+        {
+            free(*e);
+        }
+
+        *e = NULL;
     }
 }
 
 //delete element from the list, calls free(e) at the end
-void hdl_delete_element (hdl_list *list, hdl_element* e)
+void hdl_delete_element (hdl_list *list, hdl_element** e)
 {
-    __hdl_remove_element(list, e);
+    __hdl_remove_element(list, *e);
     __hdl_free_element(list, e);
 }
 
 void hdl_delete_element_by_hash(hdl_list *list, const unsigned int hash)
 {
     hdl_element* e = hdl_find_by_hash(list, hash);
-    hdl_delete_element(list, e);
+    hdl_delete_element(list, &e);
 }
 
 void hdl_delete_element_by_key (hdl_list* list, const char* key)
@@ -224,11 +229,18 @@ void hdl_destroy(hdl_list **list)
 {
     if (!(*list)) return;
 
-    hdl_element* e = NULL;
-    for (e = (*list)->head; e != NULL; e = e->next)
+    hdl_element* e = (*list)->head;
+    hdl_element* tmp = NULL;
+    while (e)
     {
-        hdl_delete_element(*list, e);
+        tmp = e->next;
+        hdl_delete_element(*list, &e);
+        e = tmp;
     }
+//    for (e = (*list)->head; e != NULL; e = e->next)
+//    {
+//        hdl_delete_element(*list, &e);
+//    }
     free(*list);
     *list = NULL;
 }
